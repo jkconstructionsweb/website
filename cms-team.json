@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "name": "Jagdish Kumar",
+    "role": "Founder & CEO",
+    "exp": "15+ Years",
+    "quote": "Quality is not an option — it's the only language we speak.",
+    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80",
+    "bg": "from-blue-900 to-secondary",
+    "active": true
+  },
+  {
+    "id": "2",
+    "name": "Priya Sharma",
+    "role": "Chief Architect",
+    "exp": "12 Years",
+    "quote": "Great architecture is a feeling — not just a structure.",
+    "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80",
+    "bg": "from-purple-900 to-secondary",
+    "active": true
+  },
+  {
+    "id": "3",
+    "name": "Arjun Mehta",
+    "role": "Head — Project Delivery",
+    "exp": "10 Years",
+    "quote": "Every delay is a design flaw in our process.",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80",
+    "bg": "from-teal-900 to-secondary",
+    "active": true
+  },
+  {
+    "id": "4",
+    "name": "Sneha Kapoor",
+    "role": "Interior Design Lead",
+    "exp": "9 Years",
+    "quote": "A room should feel like a perfectly written sentence.",
+    "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
+    "bg": "from-rose-900 to-secondary",
+    "active": true
+  }
+]

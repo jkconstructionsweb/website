@@ -1,0 +1,53 @@
+{
+  "home": {
+    "pageName": "home",
+    "sections": {
+      "hero": {
+        "slides": [
+          {
+            "heading": "Build the Home\\nYou Deserve",
+            "sub": "Premium villas and residences crafted with uncompromising quality across Gurugram & NCR.",
+            "tag": "Luxury Residential",
+            "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80",
+            "ctaLabel": "View Residential Projects",
+            "ctaHref": "/projects?filter=Residential"
+          },
+          {
+            "heading": "Spaces That\\nDrive Business",
+            "sub": "Corporate campuses, retail destinations, and industrial facilities built for performance and scale.",
+            "tag": "Commercial Excellence",
+            "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80",
+            "ctaLabel": "Explore Commercial Work",
+            "ctaHref": "/projects?filter=Commercial"
+          },
+          {
+            "heading": "Interiors That\\nInspire Living",
+            "sub: ": "Bespoke spaces designed with smart-home technology and handcrafted luxury finishes.",
+            "tag": "Premium Interiors",
+            "image": "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1920&q=80",
+            "ctaLabel": "See Interior Projects",
+            "ctaHref": "/projects?filter=Interior"
+          }
+        ],
+        "stats": [
+          {
+            "value": "500+",
+            "label": "Projects"
+          },
+          {
+            "value": "15 yrs",
+            "label": "Experience"
+          },
+          {
+            "value": "98%",
+            "label": "Satisfaction"
+          },
+          {
+            "value": "ISO",
+            "label": "9001:2015"
+          }
+        ]
+      }
+    }
+  }
+}
