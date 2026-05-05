@@ -9,7 +9,7 @@ export default function AdminContact() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
-    fetch("/api/contact")
+    fetch("/api/contact", { cache: 'no-store' })
       .then((r) => r.json())
       .then((d) => {
         setData(d);

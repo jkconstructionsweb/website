@@ -28,7 +28,7 @@ export default function AdminTeam() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/team")
+    fetch("/api/team", { cache: 'no-store' })
       .then(r => r.json())
       .then(d => {
         setItems(d);

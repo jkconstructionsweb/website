@@ -11,7 +11,7 @@ export default function AdminPages() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/pages?pageName=${selectedPage}`)
+    fetch(`/api/pages?pageName=${selectedPage}`, { cache: 'no-store' })
       .then(r => r.json())
       .then(d => {
         // Provide decent fallbacks if DB is empty for 'home'
