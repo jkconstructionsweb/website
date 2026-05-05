@@ -14,6 +14,7 @@ import fs from "fs";
 import path from "path";
 
 export const revalidate = 0; // Dynamic fetch
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const db = await connectToDatabase();

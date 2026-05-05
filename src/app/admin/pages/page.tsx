@@ -61,13 +61,22 @@ export default function AdminPages() {
 
   const handleSave = async () => {
     setSaving(true);
-    await fetch("/api/pages", {
-      method: "POST",
-      body: JSON.stringify({ pageName: selectedPage, sections: data }),
-      headers: { "Content-Type": "application/json" }
-    });
+    try {
+      const res = await fetch("/api/pages", {
+        method: "POST",
+        body: JSON.stringify({ pageName: selectedPage, sections: data }),
+        headers: { "Content-Type": "application/json" }
+      });
+      const resData = await res.json();
+      if (!res.ok || resData.error) {
+        alert("Error saving: " + (resData.error || "Server Error"));
+      } else {
+        alert("Page Saved Successfully!");
+      }
+    } catch (e) {
+      alert("Network or Server Error during save.");
+    }
     setSaving(false);
-    alert("Page Saved Successfully!");
   };
 
   const updateSlide = (index: number, field: string, value: string) => {

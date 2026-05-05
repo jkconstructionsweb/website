@@ -17,24 +17,27 @@ export default function AdminContact() {
       });
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
     setSaving(true);
-    setMessage(null);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
-      if (res.ok) {
+      const resData = await res.json();
+      if (res.ok && resData.success) {
         setMessage({ type: "success", text: "Contact details updated successfully!" });
       } else {
-        setMessage({ type: "error", text: "Failed to update contact details." });
+        setMessage({ type: "error", text: resData.error || "Failed to update details." });
       }
-    } catch (error) {
-      setMessage({ type: "error", text: "An error occurred while saving." });
+    } catch (err) {
+      setMessage({ type: "error", text: "Network or Server Error." });
+    } finally {
+      setSaving(false);
+      setTimeout(() => setMessage(null), 3000);
     }
-    setSaving(false);
   };
 
   const updateField = (field: string, value: any) => {
