@@ -8,6 +8,7 @@ export default function AdminPages() {
   const [data, setData] = useState<any>({ hero: { slides: [], stats: [] } });
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [uploadingImageIndex, setUploadingImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -85,16 +86,34 @@ export default function AdminPages() {
     setData({ ...data, hero: { ...data.hero, slides: newSlides } });
   };
 
-  const handleImageUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const newSlides = [...data.hero.slides];
-      newSlides[index] = { ...newSlides[index], image: ev.target?.result as string };
-      setData({ ...data, hero: { ...data.hero, slides: newSlides } });
-    };
-    reader.readAsDataURL(file);
+    
+    setUploadingImageIndex(index);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const resData = await res.json();
+      
+      if (res.ok && resData.url) {
+        const newSlides = [...data.hero.slides];
+        newSlides[index] = { ...newSlides[index], image: resData.url };
+        setData({ ...data, hero: { ...data.hero, slides: newSlides } });
+      } else {
+        alert("Image upload failed: " + (resData.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("Network error during image upload");
+    } finally {
+      setUploadingImageIndex(null);
+    }
   };
 
   const addSlide = () => {
@@ -157,7 +176,9 @@ export default function AdminPages() {
                       <div className="flex items-center gap-3">
                         {slide.image && <img src={slide.image} className="w-10 h-10 rounded-lg object-cover bg-neutral/10 shrink-0" alt="Preview"/>}
                         <input type="file" accept="image/*" onChange={e => handleImageUpload(index, e)} 
-                          className="w-full border border-neutral/30 rounded-lg text-sm file:mr-3 file:cursor-pointer file:py-2.5 file:px-3 file:border-0 file:bg-primary/10 file:text-primary file:font-semibold hover:file:bg-primary/20" />
+                          disabled={uploadingImageIndex === index}
+                          className="w-full border border-neutral/30 rounded-lg text-sm file:mr-3 file:cursor-pointer file:py-2.5 file:px-3 file:border-0 file:bg-primary/10 file:text-primary file:font-semibold hover:file:bg-primary/20 disabled:opacity-50" />
+                        {uploadingImageIndex === index && <span className="text-xs text-primary font-bold whitespace-nowrap">Uploading...</span>}
                       </div>
                     </div>
                   </div>
