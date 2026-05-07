@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2, Star, X, Save, ToggleLeft, ToggleRight } from "lucide-react";
 
 const INIT = [
