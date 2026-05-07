@@ -56,10 +56,14 @@ export default function AdminBlogs() {
     setSaving(true);
     try {
       const isAdd = modal === "add";
+      const payload = { ...form };
+      if (isAdd && !payload.slug) {
+        payload.slug = payload.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+      }
       const res = await fetch("/api/blogs", {
         method: isAdd ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (res.ok && data.success) {
