@@ -41,54 +41,79 @@ export default function AdminTeam() {
 
   const handleSave = async () => {
     setSaving(true);
-    let newItems;
-    if (modal === "add") {
-      newItems = [{ ...form, id: Date.now().toString() }, ...items];
-    } else {
-      newItems = items.map(t => t.id === form.id ? form : t);
+    try {
+      const isAdd = modal === "add";
+      const res = await fetch("/api/team", {
+        method: isAdd ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (isAdd) {
+          setItems(prev => [data.data, ...prev]);
+        } else {
+          setItems(prev => prev.map(t => t._id === data.data._id ? data.data : t));
+        }
+        setModal(null);
+      } else {
+        alert("Error saving: " + (data.error || "Server Error"));
+      }
+    } catch (e) {
+      alert("Network Error");
     }
-    
-    await fetch("/api/team", {
-      method: "POST",
-      body: JSON.stringify(newItems),
-      headers: { "Content-Type": "application/json" }
-    });
-
-    setItems(newItems);
     setSaving(false);
-    setModal(null);
   };
 
   const toggleActive = async (id: string) => {
-    const newItems = items.map(t => t.id === id ? { ...t, active: !t.active } : t);
-    setItems(newItems);
-    await fetch("/api/team", {
-      method: "POST",
-      body: JSON.stringify(newItems),
-      headers: { "Content-Type": "application/json" }
-    });
+    const item = items.find(t => t._id === id || t.id === id);
+    if (!item) return;
+    const updated = { ...item, active: !item.active };
+    setItems(prev => prev.map(t => (t._id === id || t.id === id) ? updated : t));
+    
+    // Attempt background save
+    if (item._id) {
+      fetch("/api/team", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated)
+      });
+    }
   };
 
   const confirmDelete = async () => {
-    const newItems = items.filter(t => t.id !== deleteId);
-    setItems(newItems);
+    if (!deleteId) return;
+    try {
+      const res = await fetch(`/api/team?id=${deleteId}`, { method: "DELETE" });
+      if (res.ok) {
+        setItems(prev => prev.filter(t => t._id !== deleteId && t.id !== deleteId));
+      } else {
+        alert("Failed to delete");
+      }
+    } catch (e) {
+      alert("Network error");
+    }
     setDeleteId(null);
-    await fetch("/api/team", {
-      method: "POST",
-      body: JSON.stringify(newItems),
-      headers: { "Content-Type": "application/json" }
-    });
   };
 
-  // NATIVE FILE UPLOADING VIA BASE64 DATA URL
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setForm((f: any) => ({ ...f, image: ev.target?.result as string }));
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      
+      if (res.ok && data.url) {
+        setForm((f: any) => ({ ...f, image: data.url }));
+      } else {
+        alert("Upload failed");
+      }
+    } catch (err) {
+      alert("Network error");
+    }
   };
 
   if (loading) {
@@ -107,7 +132,7 @@ export default function AdminTeam() {
 
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
         {items.map(t => (
-          <div key={t.id} className={`bg-white rounded-[24px] overflow-hidden border-2 shadow-sm transition-all ${t.active ? "border-neutral/20" : "border-neutral/10 opacity-60"}`}>
+          <div key={t._id || t.id} className={`bg-white rounded-[24px] overflow-hidden border-2 shadow-sm transition-all ${t.active ? "border-neutral/20" : "border-neutral/10 opacity-60"}`}>
             {/* Top Graphic */}
             <div className={`h-24 bg-gradient-to-t ${t.bg} relative`}>
                {t.image ? (
@@ -138,11 +163,11 @@ export default function AdminTeam() {
                 </span>
                 <div className="flex items-center gap-1">
                   <button onClick={() => openEdit(t)} className="w-8 h-8 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-100"><Pencil size={13} /></button>
-                  <button onClick={() => toggleActive(t.id)}
+                  <button onClick={() => toggleActive(t._id || t.id)}
                     className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${t.active ? "bg-green-50 text-green-600 hover:bg-green-100" : "bg-neutral/20 text-secondary/40 hover:bg-neutral/40"}`}>
                     {t.active ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
                   </button>
-                  <button onClick={() => setDeleteId(t.id)} className="w-8 h-8 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-100"><Trash2 size={13} /></button>
+                  <button onClick={() => setDeleteId(t._id || t.id)} className="w-8 h-8 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-100"><Trash2 size={13} /></button>
                 </div>
               </div>
             </div>

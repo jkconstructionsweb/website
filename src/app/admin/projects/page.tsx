@@ -30,32 +30,69 @@ export default function AdminProjects() {
 
   const handleSave = async () => {
     setSaving(true);
-    await new Promise(r => setTimeout(r, 600));
-    if (modal === "add") {
-      const newProject = { ...form, _id: Date.now().toString(), slug: form.title.toLowerCase().replace(/ /g, "-") };
-      setProjects(prev => [newProject, ...prev]);
-    } else {
-      setProjects(prev => prev.map(p => p._id === form._id ? form : p));
+    try {
+      const isAdd = modal === "add";
+      const payload = { ...form };
+      if (isAdd && !payload.slug) {
+        payload.slug = payload.title.toLowerCase().replace(/ /g, "-");
+      }
+      
+      const res = await fetch("/api/projects", {
+        method: isAdd ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (isAdd) {
+          setProjects(prev => [data.data, ...prev]);
+        } else {
+          setProjects(prev => prev.map(p => p._id === data.data._id ? data.data : p));
+        }
+        closeModal();
+      } else {
+        alert("Error saving: " + (data.error || "Server Error"));
+      }
+    } catch (e) {
+      alert("Network Error");
     }
     setSaving(false);
-    closeModal();
   };
 
-  const handleDelete = (id: string) => {
-    setProjects(prev => prev.filter(p => p._id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/projects?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setProjects(prev => prev.filter(p => p._id !== id));
+      } else {
+        alert("Delete failed");
+      }
+    } catch (e) {
+      alert("Network Error");
+    }
     setDeleteId(null);
   };
 
-  const handleImageUpload = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const imgs = [...(form.images || [""])];
-      imgs[idx] = ev.target?.result as string;
-      setForm((f: any) => ({ ...f, images: imgs }));
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      
+      if (res.ok && data.url) {
+        const imgs = [...(form.images || [""])];
+        imgs[idx] = data.url;
+        setForm((f: any) => ({ ...f, images: imgs }));
+      } else {
+        alert("Upload failed");
+      }
+    } catch (err) {
+      alert("Network error");
+    }
   };
 
   return (

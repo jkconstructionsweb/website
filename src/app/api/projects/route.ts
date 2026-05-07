@@ -80,3 +80,17 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ success: false, error: 'Failed to delete project' }, { status: 500 });
   }
 }
+
+export async function PUT(req: Request) {
+  try {
+    const data = await req.json();
+    const db = await connectToDatabase();
+    if (!db) return NextResponse.json({ success: false, error: "No DB" }, { status: 500 });
+    
+    const { _id, ...updateData } = data;
+    const project = await Project.findByIdAndUpdate(_id, updateData, { new: true });
+    return NextResponse.json({ success: true, data: project });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: 'Failed to update project' }, { status: 500 });
+  }
+}

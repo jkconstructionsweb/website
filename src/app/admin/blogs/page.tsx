@@ -54,24 +54,64 @@ export default function AdminBlogs() {
 
   const handleSave = async () => {
     setSaving(true);
-    await new Promise(r => setTimeout(r, 600));
-    if (modal === "add") {
-      setPosts(prev => [{ ...form, _id: Date.now().toString(), createdAt: new Date().toISOString() }, ...prev]);
-    } else {
-      setPosts(prev => prev.map(p => p._id === form._id ? form : p));
+    try {
+      const isAdd = modal === "add";
+      const res = await fetch("/api/blogs", {
+        method: isAdd ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (isAdd) {
+          setPosts(prev => [data.data, ...prev]);
+        } else {
+          setPosts(prev => prev.map(p => p._id === data.data._id ? data.data : p));
+        }
+        closeModal();
+      } else {
+        alert("Error saving blog: " + (data.error || "Server Error"));
+      }
+    } catch (e) {
+      alert("Network Error while saving blog");
     }
     setSaving(false);
-    closeModal();
   };
 
-  const handleFeaturedImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFeaturedImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setForm((f: any) => ({ ...f, featuredImage: ev.target?.result as string }));
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      
+      if (res.ok && data.url) {
+        setForm((f: any) => ({ ...f, featuredImage: data.url }));
+      } else {
+        alert("Image upload failed");
+      }
+    } catch (err) {
+      alert("Network error during upload");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      const res = await fetch(`/api/blogs?id=${deleteId}`, { method: "DELETE" });
+      if (res.ok) {
+        setPosts(prev => prev.filter(p => p._id !== deleteId));
+      } else {
+        alert("Failed to delete blog");
+      }
+    } catch (e) {
+      alert("Network error");
+    }
+    setDeleteId(null);
   };
 
   const DATE = (d: string) => new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
@@ -248,7 +288,7 @@ export default function AdminBlogs() {
             <p className="text-secondary/60 text-sm font-medium mb-6">This action cannot be undone.</p>
             <div className="flex gap-3">
               <button onClick={() => setDeleteId(null)} className="flex-1 h-11 rounded-2xl border border-neutral/40 font-bold text-sm">Cancel</button>
-              <button onClick={() => { setPosts(prev => prev.filter(p => p._id !== deleteId)); setDeleteId(null); }}
+              <button onClick={handleDelete}
                 className="flex-1 h-11 bg-red-500 text-white rounded-2xl font-bold text-sm hover:bg-red-600">Delete</button>
             </div>
           </div>

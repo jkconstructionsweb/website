@@ -64,7 +64,8 @@ const CERTS = [
 
 const FV = { initial: { opacity: 0, y: 40 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.7 } };
 
-import { useState, useEffect } from "react";
+export const dynamic = "force-dynamic";
+import React, { useEffect, useState } from "react";
 
 export default function AboutPage() {
   const [team, setTeam] = useState<any[]>(TEAM);

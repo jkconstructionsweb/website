@@ -11,39 +11,93 @@ const INIT = [
 const EMPTY = { name: "", role: "", rating: 5, text: "", image: "", active: true };
 
 export default function AdminTestimonials() {
-  const [items, setItems]       = useState(INIT);
+  const [items, setItems]       = useState<any[]>([]);
+  const [loading, setLoading]   = useState(true);
   const [modal, setModal]       = useState<"add" | "edit" | null>(null);
   const [form, setForm]         = useState<any>(EMPTY);
   const [saving, setSaving]     = useState(false);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/testimonials").then(r => r.json()).then(d => { setItems(d); setLoading(false); });
+  }, []);
 
   const openAdd  = () => { setForm({ ...EMPTY }); setModal("add"); };
   const openEdit = (t: any) => { setForm({ ...t }); setModal("edit"); };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setForm((f: any) => ({ ...f, image: ev.target?.result as string }));
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      
+      if (res.ok && data.url) {
+        setForm((f: any) => ({ ...f, image: data.url }));
+      } else {
+        alert("Upload failed");
+      }
+    } catch (err) {
+      alert("Network error");
+    }
   };
 
   const handleSave = async () => {
     setSaving(true);
-    await new Promise(r => setTimeout(r, 500));
-    if (modal === "add") {
-      setItems(prev => [{ ...form, id: Date.now() }, ...prev]);
-    } else {
-      setItems(prev => prev.map(t => t.id === form.id ? form : t));
+    try {
+      const isAdd = modal === "add";
+      const res = await fetch("/api/testimonials", {
+        method: isAdd ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (isAdd) {
+          setItems(prev => [data.data, ...prev]);
+        } else {
+          setItems(prev => prev.map(t => t._id === data.data._id ? data.data : t));
+        }
+        setModal(null);
+      } else {
+        alert("Error saving: " + (data.error || "Server Error"));
+      }
+    } catch (e) {
+      alert("Network Error");
     }
     setSaving(false);
-    setModal(null);
   };
 
-  const toggleActive = (id: number) =>
-    setItems(prev => prev.map(t => t.id === id ? { ...t, active: !t.active } : t));
+  const toggleActive = async (id: string) => {
+    const item = items.find(t => t._id === id);
+    if (!item) return;
+    const updated = { ...item, active: !item.active };
+    setItems(prev => prev.map(t => t._id === id ? updated : t));
+    
+    fetch("/api/testimonials", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated)
+    });
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      const res = await fetch(`/api/testimonials?id=${deleteId}`, { method: "DELETE" });
+      if (res.ok) {
+        setItems(prev => prev.filter(t => t._id !== deleteId));
+      } else {
+        alert("Failed to delete");
+      }
+    } catch (e) {
+      alert("Network error");
+    }
+    setDeleteId(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -56,8 +110,10 @@ export default function AdminTestimonials() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-5">
-        {items.map(t => (
-          <div key={t.id} className={`bg-white rounded-[24px] p-6 border-2 shadow-sm transition-all ${t.active ? "border-neutral/20" : "border-neutral/10 opacity-60"}`}>
+        {loading ? (
+          <div className="col-span-2 text-center py-12 text-secondary/40 font-bold">Loading Testimonials...</div>
+        ) : items.map(t => (
+          <div key={t._id || t.id} className={`bg-white rounded-[24px] p-6 border-2 shadow-sm transition-all ${t.active ? "border-neutral/20" : "border-neutral/10 opacity-60"}`}>
             <div className="flex items-start justify-between gap-4 mb-4">
               <div className="flex items-center gap-3">
                 {t.image ? (
@@ -72,11 +128,11 @@ export default function AdminTestimonials() {
               </div>
               <div className="flex items-center gap-1">
                 <button onClick={() => openEdit(t)} className="w-8 h-8 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-100"><Pencil size={13} /></button>
-                <button onClick={() => toggleActive(t.id)}
+                <button onClick={() => toggleActive(t._id)}
                   className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${t.active ? "bg-green-50 text-green-600 hover:bg-green-100" : "bg-neutral/20 text-secondary/40 hover:bg-neutral/40"}`}>
                   {t.active ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
                 </button>
-                <button onClick={() => setDeleteId(t.id)} className="w-8 h-8 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-100"><Trash2 size={13} /></button>
+                <button onClick={() => setDeleteId(t._id)} className="w-8 h-8 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-100"><Trash2 size={13} /></button>
               </div>
             </div>
             <div className="flex mb-3">
@@ -158,7 +214,7 @@ export default function AdminTestimonials() {
             <h3 className="text-xl font-black text-secondary mb-2">Delete Testimonial?</h3>
             <div className="flex gap-3 mt-6">
               <button onClick={() => setDeleteId(null)} className="flex-1 h-11 rounded-2xl border border-neutral/40 font-bold text-sm">Cancel</button>
-              <button onClick={() => { setItems(prev => prev.filter(t => t.id !== deleteId)); setDeleteId(null); }}
+              <button onClick={handleDelete}
                 className="flex-1 h-11 bg-red-500 text-white rounded-2xl font-bold text-sm">Delete</button>
             </div>
           </div>
