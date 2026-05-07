@@ -21,21 +21,23 @@ export async function POST(req: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    return new Promise<NextResponse>((resolve, reject) => {
+    const uploadResult = await new Promise<any>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { folder: 'jk_constructions' },
         (error, result) => {
           if (error) {
             console.error('Cloudinary Upload Error:', error);
-            resolve(NextResponse.json({ error: 'Upload failed' }, { status: 500 }));
+            reject(error);
           } else {
-            resolve(NextResponse.json({ url: result?.secure_url }, { status: 200 }));
+            resolve(result);
           }
         }
       );
 
       uploadStream.end(buffer);
     });
+
+    return NextResponse.json({ url: uploadResult?.secure_url }, { status: 200 });
   } catch (error) {
     console.error('Image Upload API Error:', error);
     return NextResponse.json({ error: 'Server Error' }, { status: 500 });
