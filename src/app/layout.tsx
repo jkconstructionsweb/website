@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "JK Constructions | Premium Construction Services",
   description: "Modern and professional construction services for residential, commercial, and interior projects.",
   icons: {
-    icon: "/Favicon Logo.png",
+    icon: "/favicon.png",
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
