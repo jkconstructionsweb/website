@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
-import { Home, Phone, Mail, MapPin, Instagram, Facebook, Linkedin, Twitter, Youtube } from 'lucide-react';
+import { Home, Phone, Mail, MapPin } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Linkedin, Youtube } from '@/components/ui/SocialIcons';
 
 export default function Footer() {
   const [data, setData] = useState<any>(null);

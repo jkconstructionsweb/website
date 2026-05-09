@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/Button";
 import {
   MapPin, Phone, Mail, MessageCircle,
   Clock, CheckCircle, User, Send,
-  ArrowRight, Building2, Facebook, Instagram, Twitter, Linkedin, Youtube
+  ArrowRight, Building2
 } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, Youtube } from "@/components/ui/SocialIcons";
 
 const CONTACT_INFO = [
   {
