@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
-import { Home, Phone, Mail, MapPin } from 'lucide-react';
+import { Home, Phone, Mail, MapPin, Instagram, Facebook, Linkedin, Twitter, Youtube } from 'lucide-react';
 
 export default function Footer() {
   const [data, setData] = useState<any>(null);
@@ -84,9 +84,35 @@ export default function Footer() {
         {/* Copyright Bar */}
         <div className="border-t border-white/10 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-white/40 text-sm gap-4">
           <p>&copy; {new Date().getFullYear()} JK Constructions. Designed by <a href="https://webseospecialist.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors underline decoration-primary/50 underline-offset-4 font-semibold text-white/70">webseospecialist.com</a></p>
+          
+          {data?.socials && (
+            <div className="flex items-center gap-5 my-4 md:my-0">
+              {data.socials.facebook && <a href={data.socials.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Facebook"><Facebook size={20} /></a>}
+              {data.socials.instagram && <a href={data.socials.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Instagram"><Instagram size={20} /></a>}
+              {data.socials.twitter && <a href={data.socials.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="X / Twitter"><Twitter size={20} /></a>}
+              {data.socials.linkedin && <a href={data.socials.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="LinkedIn"><Linkedin size={20} /></a>}
+              {data.socials.youtube && <a href={data.socials.youtube} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="YouTube"><Youtube size={20} /></a>}
+              {data.socials.pinterest && (
+                <a href={data.socials.pinterest} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" title="Pinterest">
+                  <img src="/pinterest.png" alt="Pinterest" className="w-[18px] h-[18px] object-contain" />
+                </a>
+              )}
+              {data.socials.justdial && (
+                <a href={data.socials.justdial} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" title="Justdial">
+                  <img src="/justdial.png" alt="Justdial" className="w-[18px] h-[18px] object-contain" />
+                </a>
+              )}
+              {data.socials.indiamart && (
+                <a href={data.socials.indiamart} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" title="IndiaMART">
+                  <img src="/indiamart.png" alt="IndiaMART" className="w-[18px] h-[18px] object-contain" />
+                </a>
+              )}
+            </div>
+          )}
+
           <div className="flex gap-4">
             <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
           </div>
         </div>
       </div>

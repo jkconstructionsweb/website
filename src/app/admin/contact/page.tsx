@@ -275,10 +275,42 @@ export default function AdminContact() {
               />
             </div>
             <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Twitter</label>
+              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Twitter / X</label>
               <input
                 value={data.socials?.twitter || ""}
                 onChange={(e) => updateSocial("twitter", e.target.value)}
+                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Justdial</label>
+              <input
+                value={data.socials?.justdial || ""}
+                onChange={(e) => updateSocial("justdial", e.target.value)}
+                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">IndiaMART</label>
+              <input
+                value={data.socials?.indiamart || ""}
+                onChange={(e) => updateSocial("indiamart", e.target.value)}
+                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">YouTube</label>
+              <input
+                value={data.socials?.youtube || ""}
+                onChange={(e) => updateSocial("youtube", e.target.value)}
+                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Pinterest</label>
+              <input
+                value={data.socials?.pinterest || ""}
+                onChange={(e) => updateSocial("pinterest", e.target.value)}
                 className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
               />
             </div>

@@ -14,6 +14,10 @@ export interface IContact extends Document {
     instagram: string;
     linkedin: string;
     twitter: string;
+    justdial: string;
+    indiamart: string;
+    youtube: string;
+    pinterest: string;
   };
 }
 
@@ -32,6 +36,10 @@ const ContactSchema = new Schema<IContact>(
       instagram: { type: String, default: "" },
       linkedin: { type: String, default: "" },
       twitter: { type: String, default: "" },
+      justdial: { type: String, default: "" },
+      indiamart: { type: String, default: "" },
+      youtube: { type: String, default: "" },
+      pinterest: { type: String, default: "" },
     },
   },
   { timestamps: true }

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import {
   MapPin, Phone, Mail, MessageCircle,
   Clock, CheckCircle, User, Send,
-  ArrowRight, Building2
+  ArrowRight, Building2, Facebook, Instagram, Twitter, Linkedin, Youtube
 } from "lucide-react";
 
 const CONTACT_INFO = [
@@ -245,6 +245,58 @@ export default function ContactPage() {
                   </div>
                 </div>
               </motion.div>
+
+              {/* Social Networks */}
+              {data?.socials && (
+                <motion.div
+                  className="bg-white rounded-[28px] p-8 border border-neutral/20 shadow-sm"
+                  whileHover={{ scale: 1.01 }}
+                >
+                  <h3 className="text-2xl font-black text-secondary mb-5">Connect With Us Online</h3>
+                  <div className="flex flex-wrap items-center gap-4">
+                    {data.socials.facebook && (
+                      <a href={data.socials.facebook} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-600 flex items-center justify-center rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-100 hover:scale-105" title="Facebook">
+                        <Facebook size={22} />
+                      </a>
+                    )}
+                    {data.socials.instagram && (
+                      <a href={data.socials.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-pink-50 text-pink-600 flex items-center justify-center rounded-2xl hover:bg-pink-600 hover:text-white transition-all shadow-sm border border-pink-100 hover:scale-105" title="Instagram">
+                        <Instagram size={22} />
+                      </a>
+                    )}
+                    {data.socials.twitter && (
+                      <a href={data.socials.twitter} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-sky-50 text-sky-500 flex items-center justify-center rounded-2xl hover:bg-sky-500 hover:text-white transition-all shadow-sm border border-sky-100 hover:scale-105" title="X / Twitter">
+                        <Twitter size={22} />
+                      </a>
+                    )}
+                    {data.socials.linkedin && (
+                      <a href={data.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-700 flex items-center justify-center rounded-2xl hover:bg-blue-700 hover:text-white transition-all shadow-sm border border-blue-200 hover:scale-105" title="LinkedIn">
+                        <Linkedin size={22} />
+                      </a>
+                    )}
+                    {data.socials.youtube && (
+                      <a href={data.socials.youtube} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 text-red-600 flex items-center justify-center rounded-2xl hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-100 hover:scale-105" title="YouTube">
+                        <Youtube size={22} />
+                      </a>
+                    )}
+                    {data.socials.pinterest && (
+                      <a href={data.socials.pinterest} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 flex items-center justify-center rounded-2xl hover:bg-red-100 transition-all shadow-sm border border-red-200 hover:scale-105" title="Pinterest">
+                        <img src="/pinterest.png" alt="Pinterest" className="w-7 h-7 object-contain" />
+                      </a>
+                    )}
+                    {data.socials.justdial && (
+                      <a href={data.socials.justdial} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-orange-50 flex items-center justify-center rounded-2xl hover:bg-orange-100 transition-all shadow-sm border border-orange-200 hover:scale-105" title="Justdial">
+                        <img src="/justdial.png" alt="Justdial" className="w-7 h-7 object-contain" />
+                      </a>
+                    )}
+                    {data.socials.indiamart && (
+                      <a href={data.socials.indiamart} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-indigo-50 flex items-center justify-center rounded-2xl hover:bg-indigo-100 transition-all shadow-sm border border-indigo-200 hover:scale-105" title="IndiaMART">
+                        <img src="/indiamart.png" alt="IndiaMART" className="w-7 h-7 object-contain mix-blend-multiply" />
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
 
             {/* RIGHT: Form */}
