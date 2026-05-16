@@ -68,7 +68,8 @@ export const dynamic = "force-dynamic";
 import React, { useEffect, useState } from "react";
 
 export default function AboutPage() {
-  const [team, setTeam] = useState<any[]>(TEAM);
+  const [team, setTeam] = useState<any[]>([]);
+  const [loadingTeam, setLoadingTeam] = useState(true);
 
   useEffect(() => {
     fetch("/api/team")
@@ -78,7 +79,8 @@ export default function AboutPage() {
           setTeam(d.filter((t: any) => t.active !== false));
         }
       })
-      .catch(e => console.error("Failed to load dynamic team:", e));
+      .catch(e => console.error("Failed to load dynamic team:", e))
+      .finally(() => setLoadingTeam(false));
   }, []);
 
   return (
@@ -88,7 +90,7 @@ export default function AboutPage() {
       <section className="relative h-[55vh] min-h-[420px] w-full flex items-end overflow-hidden pt-16">
         <Image
           src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"
-          fill sizes="100vw" className="object-cover object-center" alt="About JK Constructions" priority unoptimized
+          fill sizes="100vw" className="object-cover object-center" alt="About JK Constructions" priority
         />
         {/* Gradients for readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-transparent h-40" />
@@ -277,7 +279,12 @@ export default function AboutPage() {
           </motion.div>
 
           {/* MD3 Card Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {loadingTeam ? (
+            <div className="flex justify-center py-20">
+              <div className="w-10 h-10 border-4 border-neutral/10 border-t-primary rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {team.map((m, i) => (
               <motion.div
                 key={m.name}

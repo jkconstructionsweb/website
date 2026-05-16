@@ -154,8 +154,8 @@ export default function ContactPage() {
       {/* ── HERO ── */}
       <section className="relative h-[55vh] min-h-[400px] w-full flex items-end overflow-hidden pt-16">
         <Image
-          src="https://images.unsplash.com/photo-1577415124269-fc1140a69e91?auto=format&fit=crop&w=1920&q=80"
-          fill className="object-cover object-center" alt="Contact Us" priority unoptimized
+          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1920&q=80"
+          fill sizes="100vw" className="object-cover object-center" alt="Contact Us" priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/65 to-transparent" />
         <div className="container relative z-10 px-4 md:px-6 pb-14 mx-auto">
@@ -256,42 +256,42 @@ export default function ContactPage() {
                   <h3 className="text-2xl font-black text-secondary mb-5">Connect With Us Online</h3>
                   <div className="flex flex-wrap items-center gap-4">
                     {data.socials.facebook && (
-                      <a href={data.socials.facebook} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-600 flex items-center justify-center rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-100 hover:scale-105" title="Facebook">
+                      <a href={data.socials.facebook.startsWith('http') ? data.socials.facebook : `https://${data.socials.facebook}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-600 flex items-center justify-center rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-100 hover:scale-105" title="Facebook">
                         <Facebook size={22} />
                       </a>
                     )}
                     {data.socials.instagram && (
-                      <a href={data.socials.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-pink-50 text-pink-600 flex items-center justify-center rounded-2xl hover:bg-pink-600 hover:text-white transition-all shadow-sm border border-pink-100 hover:scale-105" title="Instagram">
+                      <a href={data.socials.instagram.startsWith('http') ? data.socials.instagram : `https://${data.socials.instagram}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-pink-50 text-pink-600 flex items-center justify-center rounded-2xl hover:bg-pink-600 hover:text-white transition-all shadow-sm border border-pink-100 hover:scale-105" title="Instagram">
                         <Instagram size={22} />
                       </a>
                     )}
                     {data.socials.twitter && (
-                      <a href={data.socials.twitter} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-sky-50 text-sky-500 flex items-center justify-center rounded-2xl hover:bg-sky-500 hover:text-white transition-all shadow-sm border border-sky-100 hover:scale-105" title="X / Twitter">
+                      <a href={data.socials.twitter.startsWith('http') ? data.socials.twitter : `https://${data.socials.twitter}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-sky-50 text-sky-500 flex items-center justify-center rounded-2xl hover:bg-sky-500 hover:text-white transition-all shadow-sm border border-sky-100 hover:scale-105" title="X / Twitter">
                         <Twitter size={22} />
                       </a>
                     )}
                     {data.socials.linkedin && (
-                      <a href={data.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-700 flex items-center justify-center rounded-2xl hover:bg-blue-700 hover:text-white transition-all shadow-sm border border-blue-200 hover:scale-105" title="LinkedIn">
+                      <a href={data.socials.linkedin.startsWith('http') ? data.socials.linkedin : `https://${data.socials.linkedin}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-700 flex items-center justify-center rounded-2xl hover:bg-blue-700 hover:text-white transition-all shadow-sm border border-blue-200 hover:scale-105" title="LinkedIn">
                         <Linkedin size={22} />
                       </a>
                     )}
                     {data.socials.youtube && (
-                      <a href={data.socials.youtube} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 text-red-600 flex items-center justify-center rounded-2xl hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-100 hover:scale-105" title="YouTube">
+                      <a href={data.socials.youtube.startsWith('http') ? data.socials.youtube : `https://${data.socials.youtube}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 text-red-600 flex items-center justify-center rounded-2xl hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-100 hover:scale-105" title="YouTube">
                         <Youtube size={22} />
                       </a>
                     )}
                     {data.socials.pinterest && (
-                      <a href={data.socials.pinterest} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 flex items-center justify-center rounded-2xl hover:bg-red-100 transition-all shadow-sm border border-red-200 hover:scale-105" title="Pinterest">
+                      <a href={data.socials.pinterest.startsWith('http') ? data.socials.pinterest : `https://${data.socials.pinterest}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 flex items-center justify-center rounded-2xl hover:bg-red-100 transition-all shadow-sm border border-red-200 hover:scale-105" title="Pinterest">
                         <img src="/pinterest.png" alt="Pinterest" className="w-7 h-7 object-contain" />
                       </a>
                     )}
                     {data.socials.justdial && (
-                      <a href={data.socials.justdial} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-orange-50 flex items-center justify-center rounded-2xl hover:bg-orange-100 transition-all shadow-sm border border-orange-200 hover:scale-105" title="Justdial">
+                      <a href={data.socials.justdial.startsWith('http') ? data.socials.justdial : `https://${data.socials.justdial}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-orange-50 flex items-center justify-center rounded-2xl hover:bg-orange-100 transition-all shadow-sm border border-orange-200 hover:scale-105" title="Justdial">
                         <img src="/justdial.png" alt="Justdial" className="w-7 h-7 object-contain" />
                       </a>
                     )}
                     {data.socials.indiamart && (
-                      <a href={data.socials.indiamart} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-indigo-50 flex items-center justify-center rounded-2xl hover:bg-indigo-100 transition-all shadow-sm border border-indigo-200 hover:scale-105" title="IndiaMART">
+                      <a href={data.socials.indiamart.startsWith('http') ? data.socials.indiamart : `https://${data.socials.indiamart}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-indigo-50 flex items-center justify-center rounded-2xl hover:bg-indigo-100 transition-all shadow-sm border border-indigo-200 hover:scale-105" title="IndiaMART">
                         <img src="/indiamart.png" alt="IndiaMART" className="w-7 h-7 object-contain mix-blend-multiply" />
                       </a>
                     )}

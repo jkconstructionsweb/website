@@ -34,8 +34,8 @@ export default function ProjectsPage() {
       {/* ── PAGE HERO ── */}
       <section className="relative h-[50vh] min-h-[400px] w-full flex items-end overflow-hidden pt-16">
         <Image
-          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1920&q=80"
-          fill className="object-cover" alt="Our Projects" priority unoptimized
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
+          fill sizes="100vw" className="object-cover" alt="Our Projects" priority
         />
         {/* Gradients for readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-transparent h-40" />

@@ -77,7 +77,7 @@ export default function Hero({ data }: HeroProps) {
       {/* ── BACKGROUND IMAGES ── */}
       {/* PERFORMANCE FIX: Static base image for instant Largest Contentful Paint (LCP) */}
       <div className="absolute inset-0 z-0">
-         <Image src={activeSlides[0]?.image || SLIDES[0].image} fill className="object-cover" alt="Hero Background" priority unoptimized />
+         <Image src={activeSlides[0]?.image || SLIDES[0].image} fill sizes="100vw" className="object-cover" alt="Hero Background" priority />
       </div>
 
       <AnimatePresence>
@@ -89,7 +89,7 @@ export default function Hero({ data }: HeroProps) {
           transition={{ duration: 1.2, ease: "easeInOut" }}
           className="absolute inset-0 z-0"
         >
-          <Image src={slide.image} fill className="object-cover" alt={slide.tag} priority unoptimized />
+          <Image src={slide.image} fill sizes="100vw" className="object-cover" alt={slide.tag} priority />
         </motion.div>
       </AnimatePresence>
 

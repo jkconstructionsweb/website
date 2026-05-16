@@ -146,8 +146,8 @@ export default function EstimatorPage() {
       {/* ── PAGE HERO ── */}
       <section className="relative pt-16 overflow-hidden bg-secondary">
         <Image
-          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1920&q=80"
-          fill className="object-cover opacity-20" alt="Estimator" priority unoptimized
+          src="https://images.unsplash.com/photo-1541888086925-920a0f4438f7?auto=format&fit=crop&w=1920&q=80"
+          fill sizes="100vw" className="object-cover opacity-20" alt="Estimator" priority
         />
         <div className="container relative z-10 mx-auto px-4 md:px-6 py-20 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
