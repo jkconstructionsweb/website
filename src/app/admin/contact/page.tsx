@@ -12,6 +12,19 @@ export default function AdminContact() {
     fetch("/api/contact", { cache: 'no-store' })
       .then((r) => r.json())
       .then((d) => {
+        if (!d.socialLinks || d.socialLinks.length === 0) {
+           const legacySocials = d.socials || {};
+           const migratedLinks = Object.entries(legacySocials)
+             .filter(([k, v]) => v) // only keep non-empty strings
+             .map(([k, v]) => {
+                let platformName = String(k).charAt(0).toUpperCase() + String(k).slice(1);
+                if (platformName === 'Youtube') platformName = 'YouTube';
+                if (platformName === 'Justdial') platformName = 'Justdial';
+                if (platformName === 'Indiamart') platformName = 'IndiaMART';
+                return { platform: platformName, url: v };
+             });
+           d.socialLinks = migratedLinks;
+        }
         setData(d);
         setLoading(false);
       });
@@ -44,11 +57,22 @@ export default function AdminContact() {
     setData((prev: any) => ({ ...prev, [field]: value }));
   };
 
-  const updateSocial = (platform: string, value: string) => {
+  const addSocialLink = () => {
     setData((prev: any) => ({
       ...prev,
-      socials: { ...prev.socials, [platform]: value },
+      socialLinks: [...(prev.socialLinks || []), { platform: "Facebook", url: "" }],
     }));
+  };
+
+  const updateSocialLink = (index: number, field: string, value: string) => {
+    const newLinks = [...data.socialLinks];
+    newLinks[index] = { ...newLinks[index], [field]: value };
+    updateField("socialLinks", newLinks);
+  };
+
+  const removeSocialLink = (index: number) => {
+    const newLinks = data.socialLinks.filter((_: any, i: number) => i !== index);
+    updateField("socialLinks", newLinks);
   };
 
   const addHourRow = () => {
@@ -242,78 +266,53 @@ export default function AdminContact() {
 
         {/* Social Media */}
         <section className="bg-white rounded-[32px] p-8 border border-neutral/10 shadow-sm space-y-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
-              <Share2 size={20} />
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+                <Share2 size={20} />
+              </div>
+              <h3 className="font-black text-lg text-secondary">Social Profiles</h3>
             </div>
-            <h3 className="font-black text-lg text-secondary">Social Profiles</h3>
+            <button
+              onClick={addSocialLink}
+              className="w-8 h-8 bg-neutral/10 text-secondary hover:bg-neutral/20 rounded-full flex items-center justify-center transition-all"
+            >
+              <Plus size={16} />
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Instagram</label>
-              <input
-                value={data.socials?.instagram || ""}
-                onChange={(e) => updateSocial("instagram", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">LinkedIn</label>
-              <input
-                value={data.socials?.linkedin || ""}
-                onChange={(e) => updateSocial("linkedin", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Facebook</label>
-              <input
-                value={data.socials?.facebook || ""}
-                onChange={(e) => updateSocial("facebook", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Twitter / X</label>
-              <input
-                value={data.socials?.twitter || ""}
-                onChange={(e) => updateSocial("twitter", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Justdial</label>
-              <input
-                value={data.socials?.justdial || ""}
-                onChange={(e) => updateSocial("justdial", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">IndiaMART</label>
-              <input
-                value={data.socials?.indiamart || ""}
-                onChange={(e) => updateSocial("indiamart", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">YouTube</label>
-              <input
-                value={data.socials?.youtube || ""}
-                onChange={(e) => updateSocial("youtube", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-secondary/40 uppercase tracking-widest mb-1.5">Pinterest</label>
-              <input
-                value={data.socials?.pinterest || ""}
-                onChange={(e) => updateSocial("pinterest", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
-              />
-            </div>
+          <div className="space-y-4">
+            {(data.socialLinks || []).map((link: any, i: number) => (
+              <div key={i} className="flex gap-3 items-start">
+                <div className="w-1/3">
+                  <input
+                    value={link.platform}
+                    onChange={(e) => updateSocialLink(i, "platform", e.target.value)}
+                    placeholder="Platform (e.g. Facebook, Custom)"
+                    className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
+                  />
+                </div>
+                <div className="flex-1">
+                  <input
+                    value={link.url}
+                    onChange={(e) => updateSocialLink(i, "url", e.target.value)}
+                    placeholder="Profile URL"
+                    className="w-full h-11 px-4 rounded-xl border-2 border-neutral/10 focus:border-primary focus:outline-none font-bold text-secondary bg-neutral/5 text-sm"
+                  />
+                </div>
+                <button
+                  onClick={() => removeSocialLink(i)}
+                  className="w-11 h-11 bg-red-50 text-red-500 hover:bg-red-100 rounded-xl flex items-center justify-center transition-all shrink-0"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+            {(!data.socialLinks || data.socialLinks.length === 0) && (
+              <div className="text-center py-6 border-2 border-dashed border-neutral/20 rounded-2xl">
+                <p className="text-secondary/50 font-bold text-sm">No social links added yet.</p>
+              </div>
+            )}
           </div>
         </section>
       </div>

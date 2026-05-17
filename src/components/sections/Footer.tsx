@@ -14,6 +14,27 @@ export default function Footer() {
       .catch(e => console.error("Footer contact fetch error:", e));
   }, []);
 
+  const renderIcon = (platform: string) => {
+    const p = platform.toLowerCase().trim();
+    if (p.includes('facebook')) return <Facebook size={20} />;
+    if (p.includes('instagram')) return <Instagram size={20} />;
+    if (p.includes('twitter') || p === 'x') return <Twitter size={20} />;
+    if (p.includes('linkedin')) return <Linkedin size={20} />;
+    if (p.includes('youtube')) return <Youtube size={20} />;
+    if (p.includes('pinterest')) return <img src="/pinterest.png" alt="Pinterest" className="w-[18px] h-[18px] object-contain" />;
+    if (p.includes('justdial')) return <img src="/justdial.png" alt="Justdial" className="w-[18px] h-[18px] object-contain" />;
+    if (p.includes('indiamart')) return <img src="/indiamart.png" alt="IndiaMART" className="w-[18px] h-[18px] object-contain" />;
+    // default custom icon
+    return <span className="font-bold text-[10px] uppercase bg-white/10 px-2 py-1 rounded border border-white/20">{platform.slice(0, 3)}</span>;
+  };
+
+  let links = data?.socialLinks || [];
+  if (links.length === 0 && data?.socials) {
+    links = Object.entries(data.socials)
+      .filter(([k, v]) => v)
+      .map(([k, v]) => ({ platform: k, url: v as string }));
+  }
+
   return (
     <footer className="bg-secondary text-white pt-20 pb-10">
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-6 lg:px-8">
@@ -86,28 +107,20 @@ export default function Footer() {
         <div className="border-t border-white/10 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-white/40 text-sm gap-4">
           <p>&copy; {new Date().getFullYear()} JK Constructions. Designed by <a href="https://webseospecialist.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors underline decoration-primary/50 underline-offset-4 font-semibold text-white/70">webseospecialist.com</a></p>
           
-          {data?.socials && (
-            <div className="flex items-center gap-5 my-4 md:my-0">
-              {data.socials.facebook && <a href={data.socials.facebook.startsWith('http') ? data.socials.facebook : `https://${data.socials.facebook}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Facebook"><Facebook size={20} /></a>}
-              {data.socials.instagram && <a href={data.socials.instagram.startsWith('http') ? data.socials.instagram : `https://${data.socials.instagram}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Instagram"><Instagram size={20} /></a>}
-              {data.socials.twitter && <a href={data.socials.twitter.startsWith('http') ? data.socials.twitter : `https://${data.socials.twitter}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="X / Twitter"><Twitter size={20} /></a>}
-              {data.socials.linkedin && <a href={data.socials.linkedin.startsWith('http') ? data.socials.linkedin : `https://${data.socials.linkedin}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="LinkedIn"><Linkedin size={20} /></a>}
-              {data.socials.youtube && <a href={data.socials.youtube.startsWith('http') ? data.socials.youtube : `https://${data.socials.youtube}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="YouTube"><Youtube size={20} /></a>}
-              {data.socials.pinterest && (
-                <a href={data.socials.pinterest.startsWith('http') ? data.socials.pinterest : `https://${data.socials.pinterest}`} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" title="Pinterest">
-                  <img src="/pinterest.png" alt="Pinterest" className="w-[18px] h-[18px] object-contain" />
-                </a>
-              )}
-              {data.socials.justdial && (
-                <a href={data.socials.justdial.startsWith('http') ? data.socials.justdial : `https://${data.socials.justdial}`} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" title="Justdial">
-                  <img src="/justdial.png" alt="Justdial" className="w-[18px] h-[18px] object-contain" />
-                </a>
-              )}
-              {data.socials.indiamart && (
-                <a href={data.socials.indiamart.startsWith('http') ? data.socials.indiamart : `https://${data.socials.indiamart}`} target="_blank" rel="noopener noreferrer" className="hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" title="IndiaMART">
-                  <img src="/indiamart.png" alt="IndiaMART" className="w-[18px] h-[18px] object-contain" />
-                </a>
-              )}
+          {links.length > 0 && (
+            <div className="flex items-center gap-4 flex-wrap my-4 md:my-0">
+              {links.map((link: any, i: number) => {
+                if (!link.url) return null;
+                const href = link.url.startsWith('http') ? link.url : `https://${link.url}`;
+                const isImage = ['pinterest', 'justdial', 'indiamart'].some(p => link.platform.toLowerCase().includes(p));
+                return (
+                  <a key={i} href={href} target="_blank" rel="noopener noreferrer" 
+                     className={isImage ? "hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" : "hover:text-primary transition-colors flex items-center justify-center min-w-[20px]"} 
+                     title={link.platform}>
+                    {renderIcon(link.platform)}
+                  </a>
+                )
+              })}
             </div>
           )}
 

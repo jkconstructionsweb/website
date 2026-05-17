@@ -19,6 +19,7 @@ export interface IContact extends Document {
     youtube: string;
     pinterest: string;
   };
+  socialLinks: { platform: string; url: string }[];
 }
 
 const ContactSchema = new Schema<IContact>(
@@ -40,6 +41,15 @@ const ContactSchema = new Schema<IContact>(
       indiamart: { type: String, default: "" },
       youtube: { type: String, default: "" },
       pinterest: { type: String, default: "" },
+    },
+    socialLinks: {
+      type: [
+        {
+          platform: { type: String },
+          url: { type: String },
+        },
+      ],
+      default: [],
     },
   },
   { timestamps: true }

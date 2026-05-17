@@ -68,6 +68,26 @@ export default function ContactPage() {
       });
   }, []);
 
+  const renderIconWithStyles = (platform: string) => {
+    const p = platform.toLowerCase().trim();
+    if (p.includes('facebook')) return { icon: <Facebook size={22} />, bgClass: 'bg-blue-50 text-blue-600 hover:bg-blue-600 border-blue-100' };
+    if (p.includes('instagram')) return { icon: <Instagram size={22} />, bgClass: 'bg-pink-50 text-pink-600 hover:bg-pink-600 border-pink-100' };
+    if (p.includes('twitter') || p === 'x') return { icon: <Twitter size={22} />, bgClass: 'bg-sky-50 text-sky-500 hover:bg-sky-500 border-sky-100' };
+    if (p.includes('linkedin')) return { icon: <Linkedin size={22} />, bgClass: 'bg-blue-50 text-blue-700 hover:bg-blue-700 border-blue-200' };
+    if (p.includes('youtube')) return { icon: <Youtube size={22} />, bgClass: 'bg-red-50 text-red-600 hover:bg-red-600 border-red-100' };
+    if (p.includes('pinterest')) return { icon: <img src="/pinterest.png" alt="Pinterest" className="w-7 h-7 object-contain" />, bgClass: 'bg-red-50 hover:bg-red-100 border-red-200 text-transparent' };
+    if (p.includes('justdial')) return { icon: <img src="/justdial.png" alt="Justdial" className="w-7 h-7 object-contain" />, bgClass: 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-transparent' };
+    if (p.includes('indiamart')) return { icon: <img src="/indiamart.png" alt="IndiaMART" className="w-7 h-7 object-contain mix-blend-multiply" />, bgClass: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-transparent' };
+    return { icon: <span className="font-bold text-sm uppercase">{platform.slice(0, 3)}</span>, bgClass: 'bg-neutral-50 text-secondary hover:bg-neutral-800 border-neutral-200' };
+  };
+
+  let links = data?.socialLinks || [];
+  if (links.length === 0 && data?.socials) {
+    links = Object.entries(data.socials)
+      .filter(([k, v]) => v)
+      .map(([k, v]) => ({ platform: k, url: v as string }));
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -248,53 +268,25 @@ export default function ContactPage() {
               </motion.div>
 
               {/* Social Networks */}
-              {data?.socials && (
+              {links.length > 0 && (
                 <motion.div
                   className="bg-white rounded-[28px] p-8 border border-neutral/20 shadow-sm"
                   whileHover={{ scale: 1.01 }}
                 >
                   <h3 className="text-2xl font-black text-secondary mb-5">Connect With Us Online</h3>
                   <div className="flex flex-wrap items-center gap-4">
-                    {data.socials.facebook && (
-                      <a href={data.socials.facebook.startsWith('http') ? data.socials.facebook : `https://${data.socials.facebook}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-600 flex items-center justify-center rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-100 hover:scale-105" title="Facebook">
-                        <Facebook size={22} />
-                      </a>
-                    )}
-                    {data.socials.instagram && (
-                      <a href={data.socials.instagram.startsWith('http') ? data.socials.instagram : `https://${data.socials.instagram}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-pink-50 text-pink-600 flex items-center justify-center rounded-2xl hover:bg-pink-600 hover:text-white transition-all shadow-sm border border-pink-100 hover:scale-105" title="Instagram">
-                        <Instagram size={22} />
-                      </a>
-                    )}
-                    {data.socials.twitter && (
-                      <a href={data.socials.twitter.startsWith('http') ? data.socials.twitter : `https://${data.socials.twitter}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-sky-50 text-sky-500 flex items-center justify-center rounded-2xl hover:bg-sky-500 hover:text-white transition-all shadow-sm border border-sky-100 hover:scale-105" title="X / Twitter">
-                        <Twitter size={22} />
-                      </a>
-                    )}
-                    {data.socials.linkedin && (
-                      <a href={data.socials.linkedin.startsWith('http') ? data.socials.linkedin : `https://${data.socials.linkedin}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-blue-50 text-blue-700 flex items-center justify-center rounded-2xl hover:bg-blue-700 hover:text-white transition-all shadow-sm border border-blue-200 hover:scale-105" title="LinkedIn">
-                        <Linkedin size={22} />
-                      </a>
-                    )}
-                    {data.socials.youtube && (
-                      <a href={data.socials.youtube.startsWith('http') ? data.socials.youtube : `https://${data.socials.youtube}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 text-red-600 flex items-center justify-center rounded-2xl hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-100 hover:scale-105" title="YouTube">
-                        <Youtube size={22} />
-                      </a>
-                    )}
-                    {data.socials.pinterest && (
-                      <a href={data.socials.pinterest.startsWith('http') ? data.socials.pinterest : `https://${data.socials.pinterest}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-red-50 flex items-center justify-center rounded-2xl hover:bg-red-100 transition-all shadow-sm border border-red-200 hover:scale-105" title="Pinterest">
-                        <img src="/pinterest.png" alt="Pinterest" className="w-7 h-7 object-contain" />
-                      </a>
-                    )}
-                    {data.socials.justdial && (
-                      <a href={data.socials.justdial.startsWith('http') ? data.socials.justdial : `https://${data.socials.justdial}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-orange-50 flex items-center justify-center rounded-2xl hover:bg-orange-100 transition-all shadow-sm border border-orange-200 hover:scale-105" title="Justdial">
-                        <img src="/justdial.png" alt="Justdial" className="w-7 h-7 object-contain" />
-                      </a>
-                    )}
-                    {data.socials.indiamart && (
-                      <a href={data.socials.indiamart.startsWith('http') ? data.socials.indiamart : `https://${data.socials.indiamart}`} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-indigo-50 flex items-center justify-center rounded-2xl hover:bg-indigo-100 transition-all shadow-sm border border-indigo-200 hover:scale-105" title="IndiaMART">
-                        <img src="/indiamart.png" alt="IndiaMART" className="w-7 h-7 object-contain mix-blend-multiply" />
-                      </a>
-                    )}
+                    {links.map((link: any, i: number) => {
+                      if (!link.url) return null;
+                      const href = link.url.startsWith('http') ? link.url : `https://${link.url}`;
+                      const { icon, bgClass } = renderIconWithStyles(link.platform);
+                      return (
+                        <a key={i} href={href} target="_blank" rel="noopener noreferrer" 
+                           className={`w-14 h-14 flex items-center justify-center rounded-2xl hover:text-white transition-all shadow-sm border hover:scale-105 ${bgClass}`} 
+                           title={link.platform}>
+                          {icon}
+                        </a>
+                      );
+                    })}
                   </div>
                 </motion.div>
               )}
