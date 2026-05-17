@@ -369,6 +369,7 @@ export default function AboutPage() {
               </motion.div>
             ))}
           </div>
+          )}
 
         </div>
       </section>
