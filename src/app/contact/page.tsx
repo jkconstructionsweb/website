@@ -10,7 +10,7 @@ import {
   Clock, CheckCircle, User, Send,
   ArrowRight, Building2
 } from "lucide-react";
-import { Facebook, Instagram, Twitter, Linkedin, Youtube } from "@/components/ui/SocialIcons";
+import { Facebook, Instagram, Twitter, Linkedin, Youtube, Whatsapp, Pinterest, Justdial, Indiamart } from "@/components/ui/SocialIcons";
 
 const CONTACT_INFO = [
   {
@@ -75,9 +75,10 @@ export default function ContactPage() {
     if (p.includes('twitter') || p === 'x') return { icon: <Twitter size={22} />, bgClass: 'bg-sky-50 text-sky-500 hover:bg-sky-500 border-sky-100' };
     if (p.includes('linkedin')) return { icon: <Linkedin size={22} />, bgClass: 'bg-blue-50 text-blue-700 hover:bg-blue-700 border-blue-200' };
     if (p.includes('youtube')) return { icon: <Youtube size={22} />, bgClass: 'bg-red-50 text-red-600 hover:bg-red-600 border-red-100' };
-    if (p.includes('pinterest')) return { icon: <img src="/pinterest.png" alt="Pinterest" className="w-7 h-7 object-contain" />, bgClass: 'bg-red-50 hover:bg-red-100 border-red-200 text-transparent' };
-    if (p.includes('justdial')) return { icon: <img src="/justdial.png" alt="Justdial" className="w-7 h-7 object-contain" />, bgClass: 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-transparent' };
-    if (p.includes('indiamart')) return { icon: <img src="/indiamart.png" alt="IndiaMART" className="w-7 h-7 object-contain mix-blend-multiply" />, bgClass: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-transparent' };
+    if (p.includes('pinterest')) return { icon: <Pinterest size={22} />, bgClass: 'bg-red-50 text-red-600 hover:bg-red-600 border-red-100' };
+    if (p.includes('justdial')) return { icon: <Justdial size={22} />, bgClass: 'bg-orange-50 text-orange-600 hover:bg-orange-500 border-orange-200' };
+    if (p.includes('indiamart')) return { icon: <Indiamart size={22} />, bgClass: 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 border-indigo-200' };
+    if (p.includes('whatsapp') || p === 'wha') return { icon: <Whatsapp size={22} />, bgClass: 'bg-green-50 text-green-600 hover:bg-green-600 border-green-200' };
     return { icon: <span className="font-bold text-sm uppercase">{platform.slice(0, 3)}</span>, bgClass: 'bg-neutral-50 text-secondary hover:bg-neutral-800 border-neutral-200' };
   };
 

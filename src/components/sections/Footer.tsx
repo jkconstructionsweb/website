@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { Home, Phone, Mail, MapPin } from 'lucide-react';
-import { Facebook, Instagram, Twitter, Linkedin, Youtube } from '@/components/ui/SocialIcons';
+import { Facebook, Instagram, Twitter, Linkedin, Youtube, Whatsapp, Pinterest, Justdial, Indiamart } from '@/components/ui/SocialIcons';
 
 export default function Footer() {
   const [data, setData] = useState<any>(null);
@@ -21,9 +21,10 @@ export default function Footer() {
     if (p.includes('twitter') || p === 'x') return <Twitter size={20} />;
     if (p.includes('linkedin')) return <Linkedin size={20} />;
     if (p.includes('youtube')) return <Youtube size={20} />;
-    if (p.includes('pinterest')) return <img src="/pinterest.png" alt="Pinterest" className="w-[18px] h-[18px] object-contain" />;
-    if (p.includes('justdial')) return <img src="/justdial.png" alt="Justdial" className="w-[18px] h-[18px] object-contain" />;
-    if (p.includes('indiamart')) return <img src="/indiamart.png" alt="IndiaMART" className="w-[18px] h-[18px] object-contain" />;
+    if (p.includes('pinterest')) return <Pinterest size={20} />;
+    if (p.includes('justdial')) return <Justdial size={20} />;
+    if (p.includes('indiamart')) return <Indiamart size={20} />;
+    if (p.includes('whatsapp') || p === 'wha') return <Whatsapp size={20} />;
     // default custom icon
     return <span className="font-bold text-[10px] uppercase bg-white/10 px-2 py-1 rounded border border-white/20">{platform.slice(0, 3)}</span>;
   };
@@ -112,10 +113,9 @@ export default function Footer() {
               {links.map((link: any, i: number) => {
                 if (!link.url) return null;
                 const href = link.url.startsWith('http') ? link.url : `https://${link.url}`;
-                const isImage = ['pinterest', 'justdial', 'indiamart'].some(p => link.platform.toLowerCase().includes(p));
                 return (
                   <a key={i} href={href} target="_blank" rel="noopener noreferrer" 
-                     className={isImage ? "hover:opacity-100 opacity-60 transition-opacity bg-white p-0.5 rounded-sm" : "hover:text-primary transition-colors flex items-center justify-center min-w-[20px]"} 
+                     className="hover:text-primary transition-colors flex items-center justify-center min-w-[20px] text-white/60 hover:opacity-100" 
                      title={link.platform}>
                     {renderIcon(link.platform)}
                   </a>
